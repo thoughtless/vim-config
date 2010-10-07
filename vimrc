@@ -208,23 +208,6 @@ command! WRITE write
 map gist :Gist -p<CR>
 let g:gist_open_browser_after_post = 1
 
-" TextMate fuzzy finder with <leader>t
-" Uses the following versions:
-"   http://github.com/sethbc/fuzzyfinder_textmate/raw/63a0ccf7ffcce5226784081ca54aede09344e397/fuzzyfinder.vim  - version 2.22.3
-"   http://github.com/sethbc/fuzzyfinder_textmate/raw/63a0ccf7ffcce5226784081ca54aede09344e397/fuzzyfinder_textmate.vim
-"   http://github.com/jamis/fuzzy_file_finder/raw/f83cbc6d890a72c463e7d8e0f8ea56638c1385ed/lib/fuzzy_file_finder.rb
-map <silent> <leader>t :FuzzyFinderTextMate<CR>
-" display relative path, 
-" instead of abbrevated path 
-" (lib/jeweler.rb vs l/jeweler.rb)
-" let g:fuzzy_path_display = 'relative_path'
-let g:fuzzy_matching_limit = 20
-" ignore stuff that can't be openned, and generated files
-let g:fuzzy_ignore = "*.log;*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;coverage/**;tmp/**;rdoc/**"
-" Set up a key to refresh FuzzyFinder list:
-map <special> <F12> :ruby finder.rescan!<ENTER>
-
-
 " make mouse work in console mode vim
 " a => All modes. See :help mouse for full list of modes.
 set mouse=a
