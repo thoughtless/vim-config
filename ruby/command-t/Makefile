@@ -4,59 +4,65 @@ SHELL = /bin/sh
 #### Start of system configuration section. ####
 
 srcdir = .
-topdir = /home/paul/.rvm/rubies/ruby-1.8.6-p287/lib/ruby/1.8/x86_64-linux
+topdir = /usr/lib/ruby/1.8/x86_64-linux
 hdrdir = $(topdir)
 VPATH = $(srcdir):$(topdir):$(hdrdir)
-prefix = $(DESTDIR)/home/paul/.rvm/rubies/ruby-1.8.6-p287
 exec_prefix = $(prefix)
-sitedir = $(prefix)/lib/ruby/site_ruby
+prefix = $(DESTDIR)/usr
+sharedstatedir = $(prefix)/com
+mandir = $(prefix)/share/man
+psdir = $(docdir)
+oldincludedir = $(DESTDIR)/usr/include
+localedir = $(datarootdir)/locale
+bindir = $(exec_prefix)/bin
+libexecdir = $(prefix)/lib/ruby1.8
+sitedir = $(DESTDIR)/usr/local/lib/site_ruby
+htmldir = $(docdir)
+vendorarchdir = $(vendorlibdir)/$(sitearch)
+includedir = $(prefix)/include
+infodir = $(prefix)/share/info
+vendorlibdir = $(vendordir)/$(ruby_version)
+sysconfdir = $(DESTDIR)/etc
+libdir = $(exec_prefix)/lib
+sbindir = $(exec_prefix)/sbin
 rubylibdir = $(libdir)/ruby/$(ruby_version)
 docdir = $(datarootdir)/doc/$(PACKAGE)
 dvidir = $(docdir)
+vendordir = $(libdir)/ruby/vendor_ruby
 datarootdir = $(prefix)/share
-archdir = $(rubylibdir)/$(arch)
-sbindir = $(exec_prefix)/sbin
-psdir = $(docdir)
-localedir = $(datarootdir)/locale
-htmldir = $(docdir)
-datadir = $(datarootdir)
-includedir = $(prefix)/include
-infodir = $(datarootdir)/info
-sysconfdir = $(prefix)/etc
-mandir = $(datarootdir)/man
-libdir = $(exec_prefix)/lib
-sharedstatedir = $(prefix)/com
-oldincludedir = $(DESTDIR)/usr/include
 pdfdir = $(docdir)
+archdir = $(rubylibdir)/$(arch)
 sitearchdir = $(sitelibdir)/$(sitearch)
-bindir = $(exec_prefix)/bin
-localstatedir = $(prefix)/var
+datadir = $(datarootdir)
+localstatedir = $(DESTDIR)/var
 sitelibdir = $(sitedir)/$(ruby_version)
-libexecdir = $(exec_prefix)/libexec
 
 CC = gcc
 LIBRUBY = $(LIBRUBY_SO)
 LIBRUBY_A = lib$(RUBY_SO_NAME)-static.a
-LIBRUBYARG_SHARED = -Wl,-R -Wl,$(libdir) -L$(libdir) -l$(RUBY_SO_NAME)
+LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
 LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)-static
 
 RUBY_EXTCONF_H = 
-CFLAGS   =  -fPIC -g -DRUBY_EXPORT -D_GNU_SOURCE=1  -fPIC 
+CFLAGS   =  -fPIC -fno-strict-aliasing -g -g -O2  -fPIC $(cflags) 
 INCFLAGS = -I. -I$(topdir) -I$(hdrdir) -I$(srcdir)
 DEFS     = 
-CPPFLAGS = -DHAVE_RUBY_H  $(DEFS)
+CPPFLAGS = -DHAVE_RUBY_H  $(DEFS) $(cppflags)
 CXXFLAGS = $(CFLAGS) 
-DLDFLAGS = -L.  -rdynamic -Wl,-export-dynamic  
+ldflags  = -L. -Wl,-Bsymbolic-functions -rdynamic -Wl,-export-dynamic
+dldflags = 
+archflag = 
+DLDFLAGS = $(ldflags) $(dldflags) $(archflag)
 LDSHARED = $(CC) -shared
 AR = ar
 EXEEXT = 
 
-RUBY_INSTALL_NAME = ruby
-RUBY_SO_NAME = ruby
+RUBY_INSTALL_NAME = ruby1.8
+RUBY_SO_NAME = ruby1.8
 arch = x86_64-linux
 sitearch = x86_64-linux
 ruby_version = 1.8
-ruby = /home/paul/.rvm/rubies/ruby-1.8.6-p287/bin/ruby
+ruby = /usr/bin/ruby1.8
 RUBY = $(ruby)
 RM = rm -f
 MAKEDIRS = mkdir -p
@@ -70,7 +76,7 @@ COPY = cp
 preload = 
 
 libpath = . $(libdir)
-LIBPATH =  -L. -L$(libdir) -Wl,-R$(libdir)
+LIBPATH =  -L. -L$(libdir)
 DEFFILE = 
 
 CLEANFILES = mkmf.log
@@ -80,14 +86,15 @@ extout =
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED)  -ldl -lcrypt -lm   -lc
-SRCS = matcher.c ext.c match.c
-OBJS = matcher.o ext.o match.o
+LIBS = $(LIBRUBYARG_SHARED)  -lpthread -lrt -ldl -lcrypt -lm   -lc
+SRCS = ext.c match.c matcher.c
+OBJS = ext.o match.o matcher.o
 TARGET = ext
 DLLIB = $(TARGET).so
 EXTSTATIC = 
 STATIC_LIB = 
 
+BINDIR        = $(bindir)
 RUBYCOMMONDIR = $(sitedir)$(target_prefix)
 RUBYLIBDIR    = $(sitelibdir)$(target_prefix)
 RUBYARCHDIR   = $(sitearchdir)$(target_prefix)
@@ -141,7 +148,7 @@ site-install-rb: install-rb
 .c.o:
 	$(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) -c $<
 
-$(DLLIB): $(OBJS)
+$(DLLIB): $(OBJS) Makefile
 	@-$(RM) $@
 	$(LDSHARED) -o $@ $(OBJS) $(LIBPATH) $(DLDFLAGS) $(LOCAL_LIBS) $(LIBS)
 

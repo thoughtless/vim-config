@@ -1,6 +1,6 @@
 have_header: checking for ruby.h... -------------------- yes
 
-"gcc -E -I. -I/home/paul/.rvm/rubies/ruby-1.8.6-p287/lib/ruby/1.8/x86_64-linux -I.   -g -DRUBY_EXPORT -D_GNU_SOURCE=1  -fPIC  conftest.c -o conftest.i"
+"gcc -E -I. -I/usr/lib/ruby/1.8/x86_64-linux -I.    -fno-strict-aliasing -g -g -O2  -fPIC    conftest.c -o conftest.i"
 checked program was:
 /* begin */
 1: #include <ruby.h>
