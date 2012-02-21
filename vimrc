@@ -45,7 +45,7 @@ if has("autocmd")
   autocmd FileType text setlocal textwidth=78
 
   " For all ruby/rails/rspec/cucumber files, strip out trailing white space at the end of lines.
-  autocmd FileType cucumber,ruby,yaml,eruby autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+  "autocmd FileType cucumber,ruby,yaml,eruby autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
