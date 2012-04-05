@@ -246,3 +246,16 @@ set statusline+=%-16.(%l/%L,%c%V%)\ %<%P\  " offset
 autocmd BufRead,BufNewFile *.js set ft=javascript.jquery
 
 call pathogen#runtime_append_all_bundles()
+
+
+" Put tmux and GNU Screen options in this section
+if &term =~ '^screen'
+    " SEE: http://superuser.com/a/402084/90233
+    " Be sure to add this line to ~/.tmux.conf
+    "     set-window-option -g xterm-keys on
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
