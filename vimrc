@@ -226,6 +226,8 @@ let NERDTreeShowHidden = 1
 let NERDTreeMapActivateNode='<CR>'
 let NERDTreeIgnore=['\.git$','\.DS_Store','\..*\.swp']
 
+" Ignore some stuff, this is used by Command-T plugin
+set wildignore+=spec/reports/**,.git/**,.DS_Store/**
 
 " Nice statusbar
 " set statusline+=%B\  " shows hex byte of char under cursor
