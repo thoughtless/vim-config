@@ -224,10 +224,10 @@ let NERDTreeHighlightCursorline = 1
 let NERDTreeShowHidden = 1
 " map enter to activating a node
 let NERDTreeMapActivateNode='<CR>'
-let NERDTreeIgnore=['\.git$','\.DS_Store','\..*\.swp']
+let NERDTreeIgnore=['\.git$','\.DS_Store','\..*\.swp','\.jhw-cache']
 
 " Ignore some stuff, this is used by Command-T plugin
-set wildignore+=spec/reports/**,.git/**,.DS_Store/**
+set wildignore+=spec/reports/**,.git/**,.DS_Store/**,.jhw-cache/**
 
 " Nice statusbar
 " set statusline+=%B\  " shows hex byte of char under cursor
