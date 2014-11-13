@@ -2,7 +2,7 @@
 UseVimball
 finish
 ruby/command-t/controller.rb	[[[1
-430
+439
 # Copyright 2010-2014 Greg Hurrell. All rights reserved.
 # Licensed under the terms of the BSD 2-clause license.
 
@@ -289,10 +289,19 @@ module CommandT
       str.gsub(/[ \\|%#"]/, '\\\\\0')
     end
 
+    def current_buffer_visible_in_other_window
+      count = (0...::VIM::Window.count).to_a.inject(0) do |acc, i|
+        acc += 1 if ::VIM::Window[i].buffer.number == $curbuf.number
+        acc
+      end
+      count > 1
+    end
+
     def default_open_command
       if !VIM::get_bool('&modified') ||
         VIM::get_bool('&hidden') ||
-        VIM::get_bool('&autowriteall') && !VIM::get_bool('&readonly')
+        VIM::get_bool('&autowriteall') && !VIM::get_bool('&readonly') ||
+        current_buffer_visible_in_other_window
         VIM::get_string('g:CommandTAcceptSelectionCommand') || 'e'
       else
         'sp'
@@ -434,11 +443,20 @@ module CommandT
   end # class Controller
 end # module CommandT
 ruby/command-t/extconf.rb	[[[1
-38
+47
 # Copyright 2010-2014 Greg Hurrell. All rights reserved.
 # Licensed under the terms of the BSD 2-clause license.
 
-require 'mkmf'
+begin
+  require 'mkmf'
+rescue LoadError
+  puts <<-DOC.gsub(/^\s+/, '')
+    Unable to require "mkmf"; you may need to install Ruby development tools
+    (depending on your system, a "ruby-dev"/"ruby-devel" package or similar).
+    [exiting]
+  DOC
+  exit 1
+end
 
 def header(item)
   unless find_header(item)
@@ -1947,7 +1965,7 @@ module CommandT
   end # module Util
 end # module CommandT
 ruby/command-t/vim/path_utilities.rb	[[[1
-33
+34
 # Copyright 2010-2014 Greg Hurrell. All rights reserved.
 # Licensed under the terms of the BSD 2-clause license.
 
@@ -1972,8 +1990,9 @@ module CommandT
           map { |dir| File.join(path, dir) }.
           map { |dir| File.exist?(dir) }.
           any?
-          return nil if path == '/'
-          path = File.expand_path(File.join(path, '..'))
+          next_path = File.expand_path(File.join(path, '..'))
+          return nil if next_path == path
+          path = next_path
         end
         path
       end
@@ -3339,7 +3358,7 @@ ruby/command-t/depend	[[[1
 
 CFLAGS += -Wall -Wextra -Wno-unused-parameter
 doc/command-t.txt	[[[1
-1487
+1499
 *command-t.txt* Command-T plug-in for Vim         *command-t*
 
 CONTENTS                                        *command-t-contents*
@@ -3453,6 +3472,11 @@ by looking at the output of:
 Or, for very old versions of Ruby which don't define `RUBY_PATCHLEVEL`:
 
   :ruby puts RUBY_VERSION
+
+Some Linux distributions package Ruby development tools separately from Ruby
+itself; if you're using such a system you may need to install the "ruby-dev",
+"ruby-devel" or similar package using your system's package manager in order
+to build Command-T.
 
 A suitable Ruby environment for Windows can be installed using the Ruby
 1.8.7-p299 RubyInstaller available at:
@@ -4557,6 +4581,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
 HISTORY                                         *command-t-history*
+
+1.11.4 (4 November 2014)
+
+- fix infinite loop on Windows when |g:CommandTTraverseSCM| is set to a value
+  other than "pwd" (bug present since 1.11)
+- handle unwanted split edgecase when |'hidden'| is set, the current buffer is
+  modified, and it is visible in more than one window
 
 1.11.3 (10 October 2014)
 
