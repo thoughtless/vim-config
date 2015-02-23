@@ -227,7 +227,7 @@ let NERDTreeMapActivateNode='<CR>'
 let NERDTreeIgnore=['\.git$','\.DS_Store','\..*\.swp','\.jhw-cache']
 
 " Ignore some stuff, this is used by Command-T plugin
-set wildignore+=spec/reports/**,tmp/reports/**,tmp/cache/**,tmp/sass-cache/**,.git/**,.DS_Store/**,.jhw-cache/**,node_modules/**
+set wildignore+=spec/reports/**,tmp/reports/**,tmp/cache/**,tmp/sass-cache/**,.git/**,.DS_Store/**,.jhw-cache/**,node_modules/**,tmp/**
 
 " Nice statusbar
 " set statusline+=%B\  " shows hex byte of char under cursor
