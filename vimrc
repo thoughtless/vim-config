@@ -247,7 +247,7 @@ set statusline+=%-16.(%l/%L,%c%V%)\ %<%P\  " offset
 " TODO: Put all file types in a logical place
 autocmd BufRead,BufNewFile *.js set ft=javascript.jquery
 
-call pathogen#runtime_append_all_bundles()
+execute pathogen#infect()
 
 
 " Put tmux and GNU Screen options in this section
